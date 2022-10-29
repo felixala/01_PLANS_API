@@ -1,21 +1,26 @@
 package com.felixlaura.controller;
 
 import com.felixlaura.entity.Plan;
+import com.felixlaura.props.AppProperties;
 import com.felixlaura.service.PlanService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-
+import static com.felixlaura.util.Constants.*;
 @RestController
 public class PlanRestController {
 
-    @Autowired
     private PlanService planService;
+
+    Map<String, String> message;
+    public PlanRestController(PlanService planService, AppProperties appProperties) {
+        this.planService = planService;
+        this.message = appProperties.getMessages();
+    }
 
     @GetMapping("/categories")
     public ResponseEntity<Map<Integer, String>> planCategories(){
@@ -25,14 +30,14 @@ public class PlanRestController {
 
     @PostMapping("/plan")
     public ResponseEntity<String> savePlan(@RequestBody Plan plan){
-        String msg = "";
+        String messageResponse = EMPTY_STR;
         boolean savedPlan = planService.savePlan(plan);
         if(savedPlan){
-            msg = "Plan saved";
+            messageResponse = message.get(PLAN_SAVE_SUCC);
         }else{
-            msg ="Plan NO saved";
+            messageResponse =message.get(PLAN_SAVE_FAIL);
         }
-        return new ResponseEntity<>(msg, HttpStatus.CREATED);
+        return new ResponseEntity<>(messageResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("plans")
@@ -43,15 +48,16 @@ public class PlanRestController {
 
     @DeleteMapping("/plan/{planId}")
     public ResponseEntity<String> deletePlan(@PathVariable Integer planId){
-        String msg = "";
+
+        String messageResponse = EMPTY_STR;
         boolean deletePlan = planService.deletePlan(planId);
         if(deletePlan){
-            msg = "Plan deleted";
+            messageResponse = message.get(PLAN_DELETE_SUCC);
         }else {
-            msg = "Plan NO deleted";
+            messageResponse = message.get(PLAN_DELETE_FAIL);
         }
 
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
     @GetMapping("/plan/{planId}")
@@ -61,27 +67,27 @@ public class PlanRestController {
     }
 
     @PutMapping("/plan")
-    public ResponseEntity<String> updatePlan(@RequestBody Plan plan, @PathVariable Integer planId){
-        String msg = "";
+    public ResponseEntity<String> updatePlan(@RequestBody Plan plan){
+        String messageResponse = EMPTY_STR;
         boolean updatePlan = planService.updatePlan(plan);
 
-        msg = updatePlan ? "Plan Saved" : "Plan NO saved";
+        messageResponse = updatePlan ? PLAN_UPDATE_SUCC : PLAN_UPDATE_FAIL;
 
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
          }
 
     @PutMapping("/status-change/{planId}/{status}")
     public ResponseEntity<String> planStatusChange(@PathVariable Integer planId,@PathVariable String status){
-        String msg = "";
+        String messageResponse = EMPTY_STR;
         boolean isStatusChanged = planService.planStatusChange(planId, status);
 
         if(isStatusChanged){
-            msg = "Plan Status changed";
+            messageResponse = message.get(PLAN_STATUS_CHANGE_SUCC);
         } else {
-            msg ="Plan Status NO changed";
+            messageResponse = message.get(PLAN_STATUS_CHANGE_FAIL);
         }
 
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
 }

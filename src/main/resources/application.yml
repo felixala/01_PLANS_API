@@ -1,0 +1,26 @@
+spring:
+    datasource:
+        password: password
+        url: jdbc:mysql://localhost:3306/jrtp
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        show-sql: true
+
+
+
+plan-api:
+    messages:
+        planSaveSucc: Plan Saved Successfully
+        planSaveFail: Plan Save Failed
+        planUpdateSucc: Plan Updated Successfully
+        planUpdateFail: Plan Update Failed
+        planDeleteSucc: Plan Deleted Successfully
+        planDeleteFail: Plan Delete Fail
+        planStatusChangeSucc: Plan Status Changed Successfully
+        planStatusChangeFail: Plan Status Change Failed
+

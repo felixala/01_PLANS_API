@@ -9,11 +9,11 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "plan")
+@Table(name = "PLAN_MASTER")
 public class Plan {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PLAN_ID")
     private Integer planId;
 
